@@ -1,21 +1,40 @@
 package com.spring.service;
 
 import com.spring.model.Comment;
+import com.spring.model.Post;
+import com.spring.model.User;
 import com.spring.repository.CommentRepository;
+import com.spring.repository.PostRepository;
+import com.spring.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
 public class CommentService {
     private CommentRepository commentRepository;
+    private UserRepository userRepository;
+    private PostRepository postRepository;
     @Autowired
-    public CommentService(CommentRepository commentRepository) {  //Injectăm prin constructor altfel  imi da eroare 401
+    public CommentService(CommentRepository commentRepository, UserRepository userRepository, PostRepository postRepository) {  //Injectăm prin constructor altfel  imi da eroare 401
         this.commentRepository = commentRepository;
+        this.userRepository = userRepository;
+        this.postRepository = postRepository;
     }
 
-    public Comment createComment(Comment comment) {
+    public Comment createComment(Long postId,Long userId, String text, String img) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        Post post = postRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
+
+        Comment comment = new Comment();
+        comment.setText(text);
+        comment.setPost(post);
+        comment.setUser(user);
+        comment.setDate(LocalDate.now());
+        comment.setPath_image(img);
+
         return this.commentRepository.save(comment);
     }
 

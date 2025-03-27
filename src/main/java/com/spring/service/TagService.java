@@ -1,5 +1,6 @@
 package com.spring.service;
 
+import com.spring.model.Comment;
 import com.spring.model.Post;
 import com.spring.model.Tag;
 import com.spring.repository.TagRepository;
@@ -32,13 +33,14 @@ public class TagService {
         return tagRepository.findAll();
     }
 
-    public Tag updatePost(Long id,Tag postDetails) {
+    public Tag updateTag(Long id,Tag postDetails) {
         Tag tag = tagRepository.findById(id).orElseThrow(() -> new RuntimeException("Post not found"));
 
         tag.setName(postDetails.getName());
 
         return tagRepository.save(tag);
     }
+
 }
 
 

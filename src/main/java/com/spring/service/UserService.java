@@ -1,5 +1,6 @@
 package com.spring.service;
 
+import com.spring.model.Post;
 import com.spring.model.User;
 import com.spring.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +18,8 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;  // Modificăm la PasswordEncoder general
+    private PasswordEncoder passwordEncoder;
 
-    // Înregistrarea unui utilizator nou
     public User registerUser(User user) {
         Optional<User> existingUser = userRepository.findByUsername(user.getUsername());
         if (existingUser.isPresent()) {
@@ -28,9 +28,7 @@ public class UserService {
 
         // Criptarea parolei
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setDate(LocalDate.now());
-
-        return userRepository.save(user);  // Salvarea utilizatorului în baza de date
+        return userRepository.save(user);
     }
 
     // Autentificarea utilizatorului
@@ -50,17 +48,22 @@ public class UserService {
         return user;
     }
 
-    // Recuperarea tuturor utilizatorilor
     public List<User> retrieveAllUsers() {
         return userRepository.findAll();
     }
 
-    // Metodă pentru actualizarea unui utilizator
-    public User updateUser(User user) {
-        return userRepository.save(user); // Actualizarea utilizatorului în baza de date
-    }
+    public User updateUser(Long id,User userDetails) {
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Post not found"));
 
-    // Ștergerea unui utilizator după ID
+        user.setEmail(userDetails.getEmail());
+        user.setPhone(userDetails.getPhone());
+        user.setUsername(userDetails.getUsername());
+        user.setPassword(userDetails.getPassword());
+        user.setRole(userDetails.getRole());
+        user.setDate(LocalDate.now());
+
+        return userRepository.save(user);
+    }
     public String deleteUserById(Long id) {
         if (userRepository.existsById(id)) {
             userRepository.deleteById(id);

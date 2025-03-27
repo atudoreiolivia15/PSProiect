@@ -1,6 +1,8 @@
 package com.spring.controller;
 
 import com.spring.model.Post;
+import com.spring.model.User;
+import com.spring.repository.UserRepository;
 import com.spring.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,18 +10,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/posts")
 public class PostController {
     @Autowired
     private PostService postService;
-    @PostMapping("/create")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Post createPost(@RequestBody Post post) {
-        return this.postService.createPost(post);
+
+    @PostMapping("/create/{userId}")
+    public Post createPost(@PathVariable Long userId, @RequestBody Post post) {
+        return postService.createPost(post,userId);
     }
-    //????? nu imi returneaza lista de postari
     @GetMapping("/getAll")
     @ResponseBody
     public List<Post> retreiveAllPosts(){
@@ -28,8 +30,8 @@ public class PostController {
 
     @PutMapping("/update/{id}")
     @ResponseBody
-    public Post updatePost(@PathVariable Long id,@RequestBody Post post){
-        return this.postService.updatePost(id,post);
+    public ResponseEntity<?> updatePost(@PathVariable Long id, @RequestBody Post post) {
+        return this.postService.updatePost(id, post);
     }
 
     @DeleteMapping("/delete/{id}")
@@ -38,6 +40,5 @@ public class PostController {
         this.postService.deletePost(id);
         return ResponseEntity.ok("Post deleted successfully");
     }
-
 
 }

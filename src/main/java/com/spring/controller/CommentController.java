@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/comments")
@@ -17,12 +18,15 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
-    @PostMapping("/create")
+    @PostMapping("/create/{postId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public Comment createComment(@RequestBody Comment comment) {
-        return this.commentService.createComment(comment);
-    }
+    public Comment createComment(@PathVariable Long postId, @RequestBody Map<String, Object> requestBody) {
+        Long userId = ((Number) requestBody.get("userId")).longValue();
+        String commentText = (String) requestBody.get("text");
+        String img = (String) requestBody.get("img");
 
+        return this.commentService.createComment(postId,userId,commentText, img);
+    }
     @GetMapping("/getAll")
     @ResponseBody
     public List<Comment> retreiveAllComments(){

@@ -23,7 +23,7 @@ public class TagController {
 
     @GetMapping("/getAll")
     @ResponseBody
-    public List<Tag> retreiveAllComments(){
+    public List<Tag> retreiveAllTags(){
         return this.tagService.getAllTags();
     }
 
@@ -35,7 +35,7 @@ public class TagController {
 
     @DeleteMapping("/delete/{id}")
     @ResponseBody
-    public ResponseEntity<String> deleteComment(@PathVariable Long id){
+    public ResponseEntity<String> deleteTag(@PathVariable Long id){
         this.tagService.deleteTag(id);
         return ResponseEntity.ok("Tag deleted successfully");
     }

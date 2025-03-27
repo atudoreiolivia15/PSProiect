@@ -5,12 +5,15 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "comments")
 public class Comment {
     @Id
-    private int id;
+    @Column(name="comment_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne()
-    @JoinColumn(name="post_id")
+    @JoinColumn(name="post_id",nullable = false)
     private Post post;
 
     @Column(name = "text")
@@ -20,10 +23,10 @@ public class Comment {
     @Column(name="created_at")
     private LocalDate date;
     @ManyToOne()
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="user_id",nullable = false)
     private User user;
 
-    public Comment(int id, Post post, String text, String path_image, LocalDate date, User user) {
+    public Comment(Long id, Post post, String text, String path_image, LocalDate date, User user) {
         this.id = id;
         this.post = post;
         this.text = text;
@@ -36,7 +39,7 @@ public class Comment {
 
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -60,7 +63,7 @@ public class Comment {
         this.user = user;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 

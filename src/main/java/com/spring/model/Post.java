@@ -1,8 +1,10 @@
 package com.spring.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 
 @Entity
@@ -11,18 +13,21 @@ public class Post {
     @Id
     @Column(name="post_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
-    @ManyToOne()
-    @JoinColumn(name = "user_id")
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private User user;
+
+
     @Column(name = "post_title")
     private String title;
     @Column(name="post_text")
     private String text;
 
     @Column(name = "post_created_at")
-    private Date date;
+    private LocalDate date;
 
     @Column(name="post_image")
     private String imagePath;
@@ -31,12 +36,12 @@ public class Post {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    public Post(int id, User user, String title, String text, Date date, String imagePath, Status status) {
+    public Post(Long id, User user, LocalDate date, String title, String text, String imagePath, Status status) {
         this.id = id;
         this.user = user;
+        this.date = date;
         this.title = title;
         this.text = text;
-        this.date = date;
         this.imagePath = imagePath;
         this.status = status;
     }
@@ -45,7 +50,7 @@ public class Post {
 
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -61,7 +66,7 @@ public class Post {
         return text;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
@@ -73,7 +78,7 @@ public class Post {
         return status;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -89,7 +94,7 @@ public class Post {
         this.text = text;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
